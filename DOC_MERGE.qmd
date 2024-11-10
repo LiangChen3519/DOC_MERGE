@@ -1,0 +1,78 @@
+---
+title: "DOC_MERGE"
+---
+
+## Load data
+### pH
+
+```{r}
+#| warning: false
+
+library(tidyverse)
+library(readxl)
+library(lubridate)
+
+DOC <- read_xlsx("data/DOC2020-2023.xlsx")
+glimpse(DOC)
+```
+
+```{r}
+DOC %>% 
+    filter(Period == "Pre-treatment") %>% 
+    group_by(ID) %>% 
+    transmute(TOC_m = mean(TOC,na.rm = T),
+              TC_m = mean(TC,na.rm = T),
+              IC_m = mean(IC,na.rm = T),
+              TN_m = mean(TN,na.rm = T),
+              TCN_m = mean(TCN,na.rm = T)) %>% 
+    unique.data.frame() -> DOC_Cov
+#%>% 
+    #glimpse()
+
+```
+```{r}
+DOC %>% 
+    filter(Period != "Pre-treatment") %>% 
+    merge(DOC_Cov,by = "ID",all = T) %>% 
+    unique.data.frame() -> DOC_full
+
+```
+
+## pH
+```{r}
+pH <- read_csv("data/PH2020-2023.csv")
+glimpse(pH)
+```
+
+```{r}
+pH %>% 
+    filter(Period == "Pre-treatment") %>% 
+    group_by(ID) %>% 
+    transmute(pH_mean = mean(pH,na.rm = T)) %>% 
+    unique.data.frame() -> pH_Cov
+```
+```{r}
+pH %>% 
+    filter(Period != "Pre-treatment") %>% 
+    merge(pH_Cov,by = "ID",all = T) %>% 
+    unique.data.frame() -> pH_full
+```
+
+## merge
+```{r}
+DOC_Ph_full <- merge(DOC_full,pH_full,
+                     by = c("ID","Date","Set","Year","Block","Plot",
+                             "Treatment","Period","Slope","SLayer"))
+```
+```{r}
+write.csv(DOC_Cov,"DOC_COV.csv",row.names = F)
+write.csv(pH_Cov,"pH_COV.csv",row.names = F)
+```
+
+# modeling
+## LMMS
+
+```{r}
+
+```
+
