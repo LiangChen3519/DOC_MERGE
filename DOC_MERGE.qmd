@@ -17,12 +17,21 @@ DOC$Date <- dmy(DOC$Date)
 DOC$Treatment <- as.factor(DOC$Treatment)
 glimpse(DOC)
 ```
-```{r}
+```{r,fig.width=10,fig.height=4}
 DOC %>% 
-    filter(TOC<500) %>% 
+    group_by(Date,Treatment) %>% 
+    transmute(TOC = mean(TOC,na.rm = T)) %>% 
     ggplot(aes(Date,TOC))+
-    geom_boxplot(aes(fill = Treatment,
-                     group = interaction(Year, Treatment)))
+    geom_bar(aes(fill =  Treatment),
+             stat="identity",
+             position=position_dodge())+
+    geom_smooth(aes(fill=Treatment,color = Treatment))+
+    facet_wrap(year(Date)~.,scales = "free_x",ncol = 4)+
+    
+    theme_bw()+
+    scale_fill_manual(values=c("#1a9850", "#fee08b", "#f46d43"))
+    scale_color_manual(values = c("#1a9850", "#fee08b", "#f46d43"))
+    
 ```
 
 
