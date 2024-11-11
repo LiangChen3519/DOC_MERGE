@@ -3,7 +3,7 @@ title: "DOC_MERGE"
 ---
 
 ## Load data
-### pH
+### DOC
 
 ```{r}
 #| warning: false
@@ -13,8 +13,18 @@ library(readxl)
 library(lubridate)
 
 DOC <- read_xlsx("data/DOC2020-2023.xlsx")
+DOC$Date <- dmy(DOC$Date)
+DOC$Treatment <- as.factor(DOC$Treatment)
 glimpse(DOC)
 ```
+```{r}
+DOC %>% 
+    filter(TOC<500) %>% 
+    ggplot(aes(Date,TOC))+
+    geom_boxplot(aes(fill = Treatment,
+                     group = interaction(Year, Treatment)))
+```
+
 
 ```{r}
 DOC %>% 
@@ -65,8 +75,8 @@ DOC_Ph_full <- merge(DOC_full,pH_full,
                              "Treatment","Period","Slope","SLayer"))
 ```
 ```{r}
-write.csv(DOC_Cov,"DOC_COV.csv",row.names = F)
-write.csv(pH_Cov,"pH_COV.csv",row.names = F)
+write.csv(DOC_full,"DOC_full.csv",row.names = F)
+write.csv(pH_full,"pH_full.csv",row.names = F)
 ```
 
 # modeling
