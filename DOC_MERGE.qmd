@@ -19,6 +19,8 @@ glimpse(DOC)
 ```
 ```{r,fig.width=10,fig.height=4}
 DOC %>% 
+    
+    #filter(TOC<200) %>% 
     group_by(Date,Treatment) %>% 
     transmute(TOC = mean(TOC,na.rm = T)) %>% 
     ggplot(aes(Date,TOC))+
@@ -27,11 +29,60 @@ DOC %>%
              position=position_dodge())+
     geom_smooth(aes(fill=Treatment,color = Treatment))+
     facet_wrap(year(Date)~.,scales = "free_x",ncol = 4)+
-    
     theme_bw()+
-    scale_fill_manual(values=c("#1a9850", "#fee08b", "#f46d43"))
+    scale_fill_manual(values=c("#1a9850", "#fee08b", "#f46d43"))+
     scale_color_manual(values = c("#1a9850", "#fee08b", "#f46d43"))
     
+```
+
+```{r}
+DOC%>% 
+    
+    #filter(TOC<200) %>% 
+    group_by(Date,Treatment) %>% 
+    transmute(TC = mean(TC,na.rm = T)) %>% 
+    ggplot(aes(Date,TC))+
+    geom_bar(aes(fill =  Treatment),
+             stat="identity",
+             position=position_dodge())+
+    geom_smooth(aes(fill=Treatment,color = Treatment))+
+    facet_wrap(year(Date)~.,scales = "free_x",ncol = 4)+
+    theme_bw()+
+    scale_fill_manual(values=c("#1a9850", "#fee08b", "#f46d43"))+
+    scale_color_manual(values = c("#1a9850", "#fee08b", "#f46d43"))
+```
+
+
+```{r}
+DOC%>% 
+    
+    #filter(TOC<200) %>% 
+    group_by(Date,Treatment) %>% 
+    transmute(TN = mean(TN,na.rm = T)) %>% 
+    ggplot(aes(Date,TN))+
+    geom_bar(aes(fill =  Treatment),
+             stat="identity",
+             position=position_dodge())+
+    geom_smooth(aes(fill=Treatment,color = Treatment))+
+    facet_wrap(year(Date)~.,scales = "free_x",ncol = 4)+
+    theme_bw()+
+    scale_fill_manual(values=c("#1a9850", "#fee08b", "#f46d43"))+
+    scale_color_manual(values = c("#1a9850", "#fee08b", "#f46d43"))
+```
+```{r,fig.width=10,fig.height=4}
+DOC%>% 
+    filter(TCN<200) %>% 
+    group_by(Date,Treatment) %>% 
+    transmute(TCN = mean(TCN,na.rm = T)) %>% 
+    ggplot(aes(Date,TCN))+
+    geom_bar(aes(fill =  Treatment),
+             stat="identity",
+             position=position_dodge())+
+    geom_smooth(aes(fill=Treatment,color = Treatment))+
+    facet_wrap(year(Date)~.,scales = "free_x",ncol = 4)+
+    theme_bw()+
+    scale_fill_manual(values=c("#1a9850", "#fee08b", "#f46d43"))+
+    scale_color_manual(values = c("#1a9850", "#fee08b", "#f46d43"))
 ```
 
 
@@ -60,8 +111,29 @@ DOC %>%
 ## pH
 ```{r}
 pH <- read_csv("data/PH2020-2023.csv")
+pH$Date <- dmy(pH$Date)
 glimpse(pH)
 ```
+
+
+```{r,fig.width=10,fig.height=4}
+pH%>% 
+    #filter(TCN<200) %>% 
+    group_by(Date,Treatment) %>% 
+    transmute(pH = mean(pH,na.rm = T)) %>% 
+    ggplot(aes(Date,pH))+
+    geom_bar(aes(fill =  Treatment),
+             stat="identity",
+             position=position_dodge())+
+    geom_smooth(aes(fill=Treatment,color = Treatment))+
+    facet_wrap(year(Date)~.,scales = "free_x",ncol = 4)+
+    theme_bw()+
+    scale_fill_manual(values=c("#1a9850", "#fee08b", "#f46d43"))+
+    scale_color_manual(values = c("#1a9850", "#fee08b", "#f46d43"))+
+    ylim(0,10)
+```
+
+
 
 ```{r}
 pH %>% 
